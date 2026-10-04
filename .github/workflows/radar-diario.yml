@@ -1,0 +1,75 @@
+# Radar GBM – versión GRATIS. GitHub ejecuta esto en la nube (tu computadora puede estar apagada).
+# Cada hora revisa si ya toca según ajustes.json (zona America/Matamoros, con cambios de horario) y solo entonces analiza.
+# La base de datos se guarda como archivo de la versión (release) "radar-datos"; la página se publica en GitHub Pages.
+name: Radar GBM - ejecución diaria
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: radar-gbm
+  cancel-in-progress: false
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-actions.txt
+      - run: pip install -r requirements-actions.txt
+      - name: Descargar base de datos guardada
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p db
+          if gh release download radar-datos -p radar.db.gz -D db; then gunzip -f db/radar.db.gz; else echo "Primera ejecución: base de datos nueva"; fi
+      - name: Analizar (solo si ya toca, o si lo pediste a mano)
+        id: run
+        env:
+          DATABASE_PATH: db/radar.db
+          PRICE_PROVIDER: yahoo
+          BANXICO_TOKEN: ${{ secrets.BANXICO_TOKEN }}
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+          EODHD_API_KEY: ${{ secrets.EODHD_API_KEY }}
+          NOTIFY_NTFY_URL: ${{ secrets.NOTIFY_NTFY_URL }}
+          PUBLIC_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          MAX_BACKFILL_PER_RUN: "4000"
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python scripts/run_pipeline.py --settings ajustes.json --trigger manual > result.json || true
+          else
+            python scripts/run_pipeline.py --settings ajustes.json --only-if-due > result.json || true
+          fi
+          cat result.json || true
+          echo "status=$(python -c 'import json;print(json.load(open("result.json"))["status"])' 2>/dev/null || echo fallo)" >> "$GITHUB_OUTPUT"
+      - name: Generar página
+        if: steps.run.outputs.status != 'sin_cambios'
+        env:
+          DATABASE_PATH: db/radar.db
+          PRICE_PROVIDER: yahoo
+          ENABLE_INTERNAL_SCHEDULER: "0"
+        run: python scripts/export_static.py --out site --repo "${{ github.repository }}"
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.run.outputs.status != 'sin_cambios'
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
+        if: steps.run.outputs.status != 'sin_cambios'
+      - name: Guardar base de datos
+        if: steps.run.outputs.status != 'sin_cambios'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gzip -kf db/radar.db
+          gh release view radar-datos >/dev/null 2>&1 || gh release create radar-datos --title "Datos de Radar GBM (no borrar)" --notes "Base de datos de la app. Se reemplaza en cada ejecución."
+          gh release upload radar-datos db/radar.db.gz --clobber
