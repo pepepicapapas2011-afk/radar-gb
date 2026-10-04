@@ -1,0 +1,24 @@
+# Alternativa: Render (plan Starter + disco persistente). En Render, el plan gratuito se duerme y no tiene disco: no sirve.
+services:
+  - type: web
+    name: radar-gbm
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    disk:
+      name: radar-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_PATH
+        value: /data/radar.db
+      - key: EODHD_API_KEY
+        sync: false
+      - key: BANXICO_TOKEN
+        sync: false
+      - key: COINGECKO_API_KEY
+        sync: false
+      - key: APP_ACCESS_TOKEN
+        sync: false
+      - key: CRON_SECRET
+        generateValue: true

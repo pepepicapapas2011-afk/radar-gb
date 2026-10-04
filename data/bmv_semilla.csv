@@ -1,0 +1,58 @@
+ticker,nombre,tipo
+AC,"Arca Continental",accion
+ALFAA,"Alfa",accion
+ALPEKA,"Alpek",accion
+ALSEA,"Alsea",accion
+AMXB,"América Móvil",accion
+ARA,"Consorcio ARA",accion
+ASURB,"Grupo Aeroportuario del Sureste",accion
+BACHOCOB,"Industrias Bachoco",accion
+BBAJIOO,"Banco del Bajío",accion
+BIMBOA,"Grupo Bimbo",accion
+BOLSAA,"Bolsa Mexicana de Valores",accion
+CEMEXCPO,"Cemex",accion
+CHDRAUIB,"Grupo Comercial Chedraui",accion
+CUERVO,"Becle (José Cuervo)",accion
+ELEKTRA,"Grupo Elektra",accion
+FEMSAUBD,"FEMSA",accion
+FRAGUAB,"Corporativo Fragua",accion
+GAPB,"Grupo Aeroportuario del Pacífico",accion
+GCARSOA1,"Grupo Carso",accion
+GCC,"GCC",accion
+GENTERA,"Gentera",accion
+GFINBURO,"Grupo Financiero Inbursa",accion
+GFNORTEO,"Grupo Financiero Banorte",accion
+GMEXICOB,"Grupo México",accion
+GMXT,"GMéxico Transportes",accion
+GRUMAB,"Gruma",accion
+HERDEZ,"Grupo Herdez",accion
+KIMBERA,"Kimberly-Clark de México",accion
+KOFUBL,"Coca-Cola FEMSA",accion
+LABB,"Genomma Lab",accion
+LACOMERUBC,"La Comer",accion
+LIVEPOLC-1,"El Puerto de Liverpool",accion
+MEGACPO,"Megacable",accion
+NEMAKA,"Nemak",accion
+OMAB,"Grupo Aeroportuario Centro Norte",accion
+ORBIA,"Orbia",accion
+PE&OLES,"Industrias Peñoles",accion
+PINFRA,"Promotora y Operadora de Infraestructura",accion
+Q,"Quálitas",accion
+RA,"Regional",accion
+SIMECB,"Grupo Simec",accion
+SITESB-1,"Operadora de Sites Mexicanos",accion
+TLEVISACPO,"Grupo Televisa",accion
+TRAXIONA,"Grupo Traxión",accion
+VESTA,"Corporación Inmobiliaria Vesta",accion
+VOLARA,"Volaris",accion
+WALMEX,"Walmart de México",accion
+FUNO11,"Fibra Uno",fibra
+FIBRAMQ12,"Fibra Macquarie",fibra
+FMTY14,"Fibra Monterrey",fibra
+DANHOS13,"Fibra Danhos",fibra
+FIBRAPL14,"Fibra Prologis",fibra
+TERRA13,"Fibra Terrafina",fibra
+FNOVA17,"Fibra Nova",fibra
+FSHOP13,"Fibra Shop",fibra
+NAFTRACISHRS,"iShares NAFTRAC (sigue al IPC)",etf
+IVV,"iShares Core S&P 500 ETF (SIC)",etf_sic
